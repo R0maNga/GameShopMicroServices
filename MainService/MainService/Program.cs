@@ -1,19 +1,81 @@
 using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
+using BLL.Services;
+using BLL.Services.Interfaces;
+using BLL.Utils;
+using DAL;
+using MainService.AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using UserRefreshTokenProfile = BLL.AutoMapper.UserRefreshTokenProfile;
 
 var builder = WebApplication.CreateBuilder(args);
+var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
 ConfigureLogging();
 builder.Host.UseSerilog();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 // Add services to the container.
+builder.Services.AddCors();
+builder.Services.AddDbContext<MainServiceContext>(options =>
+    options.UseSqlServer(connection));
+builder.Services.AddTransient<MainServiceContext>();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+/*var jwtKey = builder.Configuration.GetValue<string>("JwtSettings:Key");
+var keyBytes = Encoding.ASCII.GetBytes(jwtKey);*/
+
+IGetTokenBytes getTokenBytes = new GetTokenBytes(builder.Configuration);
+TokenValidationParameters tokenValidation = new TokenValidationParameters
+{
+    IssuerSigningKey = new SymmetricSecurityKey(getTokenBytes.GetTokeBytes()),
+    ValidateLifetime = true,
+    ValidateAudience = false,
+    ValidateIssuer = false,
+    ClockSkew = TimeSpan.Zero
+};
+builder.Services.AddSingleton(tokenValidation);
+
+builder.Services.AddAuthentication(authOptions =>
+    {
+        authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(jwtOptions =>
+    {
+        jwtOptions.TokenValidationParameters = tokenValidation;
+        jwtOptions.Events = new JwtBearerEvents();
+        jwtOptions.Events.OnTokenValidated = async (context) =>
+        {
+            var ipAdress = context.Request.HttpContext.Connection.RemoteIpAddress.ToString();
+            
+        };
+    });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<ITokenChecker, TokenChecker>();
+builder.Services.AddTransient<IGetTokenBytes, GetTokenBytes>();
+builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(UserRefreshTokenProfile), typeof(RefreshTokenProfile), typeof(MainService.AutoMapper.UserRefreshTokenProfile));
 var app = builder.Build();
+
+app.UseCors(x => x
+    .SetIsOriginAllowed(origin => true)
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -24,8 +86,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllers();
 

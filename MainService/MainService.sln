@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainService", "MainService\MainService.csproj", "{85B51A88-455C-4102-A621-9606DA8C4BBD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2B79519D-4AAD-4F79-901A-94D2BF4F4066} = {2B79519D-4AAD-4F79-901A-94D2BF4F4066}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{14C7B0BF-C35E-4654-9CB8-96BCBBC599B1}"
 EndProject
