@@ -12,6 +12,7 @@ namespace DAL.Contracts.Finders
     {
         public Task<List<User>> GetAsync(CancellationToken token);
         public Task<User> GetByIdAsync(int id, CancellationToken token);
+        public User? GetUserByNameAndPassword(string password, string userName, CancellationToken token);
 
     }
 }

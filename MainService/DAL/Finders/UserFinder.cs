@@ -28,6 +28,16 @@ namespace DAL.Finders
             var res = AsQueryable();
             return res.FirstOrDefaultAsync(x => x.Id == id, token)!;
         }
+
+        public User? GetUserByNameAndPassword(string password, string userName, CancellationToken token)
+        {
+            var res = AsQueryable();
+            var user = res.FirstOrDefault(x => x.UserName.Equals(userName)
+                                                                && x.Password.Equals(password));
+            
+            return user;
+        }
+
         protected IQueryable<User> AsQueryable()
         {
             return _dbSet.AsQueryable();

@@ -1,4 +1,6 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
+using BLL.Models.Input.UserInput;
 using BLL.Models.Output.UserOutput;
 using BLL.Services;
 using BLL.Services.Interfaces;
@@ -8,18 +10,37 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly MainServiceContext _context;
-        private readonly ITokenService _tokenService;
-        
-        
-        
-        
-           
-                
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
+
+
+        public UserController(IUserService userService, IMapper mapper)
+        {
+            _userService = userService;
+            _mapper = mapper;
+
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateUser user, CancellationToken token)
+        {
+            try
+            {
+                /*var mappedData = _mapper.Map<CreateClothes>(clothes);*/
+                await _userService.CreateAsync(user, token);
+                return Ok("User created");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         
     }
 }

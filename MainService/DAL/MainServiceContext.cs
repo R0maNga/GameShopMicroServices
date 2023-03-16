@@ -21,6 +21,7 @@ namespace DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasKey(e => e.Id);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

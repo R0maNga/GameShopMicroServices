@@ -20,13 +20,13 @@ namespace BLL.Models.Output.RefreshTokenOutput
         {
             get
             {
-                return ExpirationDate < DateTime.UtcNow;
+                return ExpirationDate > DateTime.UtcNow;
             }
         }
 
         public string IpAdress { get; set; }
         public bool IsInvalidated { get; set; }
         public int Id { get; set; }
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
     }
 }

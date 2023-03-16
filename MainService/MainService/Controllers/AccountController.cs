@@ -18,86 +18,62 @@ namespace MainService.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ITokenService _tokenService;
-        private readonly ITokenChecker _tokenChecker;
         private readonly IMapper _mapper;
 
-        public AccountController(ITokenService tokenService, ITokenChecker tokenChecker, IMapper mapper)
+        public AccountController(ITokenService tokenService, IMapper mapper)
         {
             _tokenService = tokenService;
-            _tokenChecker = tokenChecker;
             _mapper = mapper;
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> AuthToken([FromBody] AuthenticateRequest authRequest)
+        public async Task<IActionResult> AuthToken([FromBody] AuthenticateRequest authRequest, CancellationToken token)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new AuthenticateResponse
                     { IsSuccess = false, Reason = "UserName and Password must be provided" });
             }
-            var authResponse = await _tokenService.GetTokenAsync(authRequest, HttpContext.Connection.RemoteIpAddress.ToString());
-            if (authResponse == null)
+            var authResponse = await _tokenService.GetTokenAsync(authRequest, HttpContext.Connection.RemoteIpAddress!.ToString(), token);
+            if (authResponse is null)
             {
                 return Unauthorized();
             }
-            else
-            {
-                return Ok(authResponse);
-            }
+            
+            
+            return Ok(authResponse);
+            
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> RefreshToken([FromBody] MainService.Models.Request.RefreshTokenRequest request)
+        public async Task<IActionResult> RefreshToken([FromBody] MainService.Models.Request.RefreshTokenRequest request, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(new AuthenticateResponse { IsSuccess = false, Reason = "Token must be provided" });
             }
 
-            var token = GetJwtToken(request.ExpiredToken);
+            var token = _tokenService.GetJwtToken(request.ExpiredToken);
             var mappedData = _mapper.Map<BLL.Models.Input.UserInput.RefreshTokenRequest>(request);
-            var tokenOutput =_tokenChecker.CheckToken(mappedData);
-            AuthenticateResponse response = ValidateDetails(token, tokenOutput);
+            var tokenOutput =_tokenService.CheckToken(mappedData);
+            AuthenticateResponse response = _tokenService.ValidateDetails(token, tokenOutput);
             if (!response.IsSuccess)
             {
                 return BadRequest(response);
             }
 
             tokenOutput.IsInvalidated = true;
-            _tokenChecker.UpdateToken(tokenOutput);
+            await _tokenService.UpdateToken(tokenOutput, cancellationToken);
 
-            var userName = token.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.NameId).Value;
-            var authResponse = await _tokenService.GetRefreshTokenAsync(tokenOutput.IpAdress,tokenOutput.Id, userName);
+            var userName = token.Claims.First(x => x.Type == JwtRegisteredClaimNames.NameId).Value;
+            var authResponse = await _tokenService.GetRefreshTokenAsync(tokenOutput.IpAdress,tokenOutput.Id, userName, cancellationToken);
             return Ok(authResponse);
 
         }
 
-        private AuthenticateResponse ValidateDetails(JwtSecurityToken token, UserRefreshTokenOutput userRefreshTOken)
-        {
-            if (userRefreshTOken==null)
-            {
-                return new AuthenticateResponse { IsSuccess = false, Reason = "Invalid Token Details" };
-            }
+        
 
-            if (token.ValidTo>DateTime.UtcNow)
-            {
-                return new AuthenticateResponse { IsSuccess = false, Reason = "Token expired" };
-            }
-
-            if (!userRefreshTOken.IsActive)
-            {
-                return new AuthenticateResponse { IsSuccess = false, Reason = "Refresh Token Expired" };
-            }
-
-            return new AuthenticateResponse { IsSuccess = true };
-        }
-
-        private JwtSecurityToken GetJwtToken(string expiredToken)
-        {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.ReadJwtToken(expiredToken);
-        }
+        
     }
 
 }

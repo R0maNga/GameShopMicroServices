@@ -14,5 +14,6 @@ namespace BLL.Services.Interfaces
         void RevokeToken(string token, string ipAddress);
         Task<List<GetUser>> GetAll(CancellationToken token);
         Task<GetUser?> GetById(int id, CancellationToken token);
+        public Task CreateAsync(CreateUser model, CancellationToken token);
     }
 }

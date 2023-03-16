@@ -30,7 +30,7 @@ namespace DAL.Entityes
         public bool IsInvalidated { get; set; }
         public int Id { get; set; }
         [ForeignKey("Id")]
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
         
         
 

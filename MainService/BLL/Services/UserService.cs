@@ -1,7 +1,11 @@
-﻿using BLL.Models.Input.UserInput;
+﻿using AutoMapper;
+using BLL.Models.Input.UserInput;
 using BLL.Models.Output.UserOutput;
 using BLL.Services.Interfaces;
 using DAL;
+using DAL.Contracts.Repositories;
+using DAL.Contracts.UnitOfWork;
+using DAL.Entityes;
 using Microsoft.Extensions.Options;
 
 namespace BLL.Services
@@ -9,16 +13,21 @@ namespace BLL.Services
     public class UserService : IUserService
     {
         private readonly MainServiceContext _context;
-        private ITokenService _jwtUtils;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
         
 
         public UserService(
             MainServiceContext context,
-            ITokenService jwtUtils)
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IUserRepository userRepository)
         {
             _context = context;
-            _jwtUtils = jwtUtils;
-            
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _userRepository = userRepository;
         }
         
 
@@ -35,6 +44,13 @@ namespace BLL.Services
         public Task<GetUser?> GetById(int id, CancellationToken token)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task CreateAsync(CreateUser model, CancellationToken token)
+        {
+            var mappedData = _mapper.Map<User>(model);
+            _userRepository.Create(mappedData);
+            await _unitOfWork.SaveChanges(token);
         }
     }
 }

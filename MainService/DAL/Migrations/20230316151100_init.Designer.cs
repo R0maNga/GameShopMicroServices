@@ -12,18 +12,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MainServiceContext))]
-    [Migration("20230315104501_init")]
+    [Migration("20230316151100_init")]
     partial class init
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "6.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("DAL.Entityes.User", b =>
                 {
@@ -31,7 +30,7 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -52,7 +51,7 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserRefreshTokenId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserRefreshTokenId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");

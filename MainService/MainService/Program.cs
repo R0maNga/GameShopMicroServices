@@ -5,6 +5,12 @@ using BLL.Services;
 using BLL.Services.Interfaces;
 using BLL.Utils;
 using DAL;
+using DAL.Contracts.Finders;
+using DAL.Contracts.Repositories;
+using DAL.Contracts.UnitOfWork;
+using DAL.Finders;
+using DAL.Repositories;
+using DAL.UnitOfWork;
 using MainService.AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -19,15 +25,15 @@ using UserRefreshTokenProfile = BLL.AutoMapper.UserRefreshTokenProfile;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
-ConfigureLogging();
-builder.Host.UseSerilog();
+/*ConfigureLogging();
+builder.Host.UseSerilog();*/
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 // Add services to the container.
 builder.Services.AddCors();
 builder.Services.AddDbContext<MainServiceContext>(options =>
     options.UseSqlServer(connection));
-builder.Services.AddTransient<MainServiceContext>();
+
 
 /*var jwtKey = builder.Configuration.GetValue<string>("JwtSettings:Key");
 var keyBytes = Encoding.ASCII.GetBytes(jwtKey);*/
@@ -60,10 +66,19 @@ builder.Services.AddAuthentication(authOptions =>
     });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient(provider => provider.GetRequiredService<MainServiceContext>().UserRefreshTokens);
 builder.Services.AddTransient<ITokenService, TokenService>();
-builder.Services.AddTransient<ITokenChecker, TokenChecker>();
+builder.Services.AddTransient<ITokenRepository, TokenRepository>();
+builder.Services.AddTransient<ITokenFinder, TokenFinder>();
 builder.Services.AddTransient<IGetTokenBytes, GetTokenBytes>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient(provider => provider.GetRequiredService<MainServiceContext>().UserEntities);
+
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IUserFinder, UserFinder>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
