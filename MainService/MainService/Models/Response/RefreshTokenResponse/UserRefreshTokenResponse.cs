@@ -1,7 +1,7 @@
 ﻿using DAL.Entityes;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MainService.Models.Response
+namespace MainService.Models.Response.RefreshTokenResponse
 {
     public class UserRefreshTokenResponse
     {

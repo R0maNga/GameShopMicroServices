@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MainService.Models.Request
+namespace MainService.Models.Request.RefreshTokenRequest
 {
     public class RefreshTokenRequest
     {
-        [Required] 
+        [Required]
         public string ExpiredToken { get; set; }
         [Required]
         public string RefreshToken { get; set; }
-        
-        
+
+
     }
 }

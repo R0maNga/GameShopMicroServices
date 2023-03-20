@@ -6,10 +6,9 @@ using BLL.Models.Output.RefreshTokenOutput;
 using BLL.Models.Output.UserOutput;
 using BLL.Services;
 using BLL.Services.Interfaces;
-using MainService.Models.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RefreshTokenRequest = MainService.Models.Request.RefreshTokenRequest;
+using RefreshTokenRequest = MainService.Models.Request.RefreshTokenRequest.RefreshTokenRequest;
 
 namespace MainService.Controllers
 {
@@ -46,7 +45,7 @@ namespace MainService.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> RefreshToken([FromBody] MainService.Models.Request.RefreshTokenRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Contracts.Repositories;
@@ -11,12 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class TokenRepository: AbstractRepository<UserRefreshToken>, ITokenRepository
+    public class BasketRepository : AbstractRepository<Basket>, IBasketRepository
     {
-        public TokenRepository(DbSet<UserRefreshToken> dbSet) : base(dbSet)
+        public BasketRepository(DbSet<Basket> dbSet) : base(dbSet)
         {
-
+            
         }
-
     }
 }
