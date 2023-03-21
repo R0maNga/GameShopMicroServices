@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BLL.Models.Input.BasketToGameInput
 {
-    internal class DeleteGameToBasketInput
+    public class DeleteGameToBasketInput
     {
+        public int Id { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace MainService.AutoMapper
                 CreateMap<CreateGameRequest,CreateGameInput>();
                 CreateMap<UpdateGameRequest,UpdateGameInput>();
                 CreateMap<DeleteGameRequest,DeleteGameInput>();
+                CreateMap<GetGameOutput,DeleteGameInput>();
                 CreateMap<GetGameOutput, GetGameResponse>();
             }
         }
