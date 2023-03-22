@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Entities
+namespace BLL.Models.Input.OrderInput
 {
-    public class Order
+    public class UpdateOrderInput
     {
         public int Id { get; set; }
         public string OrderStatus { get; set; }
         public int BasketId { get; set; }
-        
+
         public decimal Price { get; set; }
     }
 }

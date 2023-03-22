@@ -25,8 +25,8 @@ using UserRefreshTokenProfile = BLL.AutoMapper.UserRefreshTokenProfile;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
-/*ConfigureLogging();
-builder.Host.UseSerilog();*/
+ConfigureLogging();
+builder.Host.UseSerilog();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 // Add services to the container.
@@ -35,8 +35,6 @@ builder.Services.AddDbContext<MainServiceContext>(options =>
     options.UseSqlServer(connection));
 
 
-/*var jwtKey = builder.Configuration.GetValue<string>("JwtSettings:Key");
-var keyBytes = Encoding.ASCII.GetBytes(jwtKey);*/
 
 IGetTokenBytes getTokenBytes = new GetTokenBytes(builder.Configuration);
 TokenValidationParameters tokenValidation = new TokenValidationParameters

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Entities
+namespace DAL.Contracts.IUnitOfWork
 {
-    internal class OrderStatus
+    public interface IUnitOfWork
     {
+        public Task<int> SaveChanges(CancellationToken token);
     }
 }
