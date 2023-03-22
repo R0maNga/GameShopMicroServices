@@ -26,14 +26,14 @@ namespace DAL.Finders
         public Task<Game> FindGameById(int id, CancellationToken token)
         {
             var res = AsQueryable();
-            return res.FirstOrDefaultAsync(x => x.Id == id, token)!;
+            return res.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, token)!;
 
         }
 
         public Task<Game> FindGameByName(string name, CancellationToken token)
         {
             var res = AsQueryable();
-            return res.FirstOrDefaultAsync(x => x.Name == name, token)!;
+            return res.SingleOrDefaultAsync(x => x.Name == name, token)!;
         }
 
         protected IQueryable<Game> AsQueryable()

@@ -31,6 +31,7 @@ namespace MainService.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(new AuthenticateResponse
+
                     { IsSuccess = false, Reason = "UserName and Password must be provided" });
             }
             var authResponse = await _tokenService.GetTokenAsync(authRequest, HttpContext.Connection.RemoteIpAddress!.ToString(), token);
@@ -66,6 +67,7 @@ namespace MainService.Controllers
 
             var userName = token.Claims.First(x => x.Type == JwtRegisteredClaimNames.NameId).Value;
             var authResponse = await _tokenService.GetRefreshTokenAsync(tokenOutput.IpAdress,tokenOutput.Id, userName, cancellationToken);
+
             return Ok(authResponse);
 
         }

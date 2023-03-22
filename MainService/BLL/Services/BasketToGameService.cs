@@ -21,28 +21,29 @@ namespace BLL.Services
         private readonly IMapper _mapper;
         private readonly IBasketToGameFinder _finder;
 
-        public BasketToGameService(IBasketToGameRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IBasketToGameFinder finder)
+        public BasketToGameService(IBasketToGameRepository repository, IUnitOfWork unitOfWork, IMapper mapper, 
+            IBasketToGameFinder finder)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _finder = finder;
         }
-        public async Task CreateBasketToGame(CreateGameToBasketInput gameToBasket, CancellationToken token)
+        public async Task CreateBasketToGame(CreateBasketToGameInput gameToBasket, CancellationToken token)
         {
             var mappedData = _mapper.Map<BasketToGame>(gameToBasket);
             _repository.Create(mappedData);
             await _unitOfWork.SaveChanges(token);
         }
 
-        public async Task UpdateBasketToGame(UpdateGameToBasketInput gameToBasket, CancellationToken token)
+        public async Task UpdateBasketToGame(UpdateBasketToGameInput gameToBasket, CancellationToken token)
         {
             var mappedData = _mapper.Map<BasketToGame>(gameToBasket);
             _repository.Update(mappedData);
             await _unitOfWork.SaveChanges(token);
         }
 
-        public async Task DeleteBasketToGame(DeleteGameToBasketInput gameToBasket, CancellationToken token)
+        public async Task DeleteBasketToGame(DeleteBasketToGameInput gameToBasket, CancellationToken token)
         {
             var mappedData = _mapper.Map<BasketToGame>(gameToBasket);
             _repository.Delete(mappedData);
@@ -52,12 +53,14 @@ namespace BLL.Services
         public async Task<GetBasketToGameOutput> GetBasketToGameById(int id, CancellationToken token)
         {
             var foundData = await _finder.GetById(id, token);
+
             return _mapper.Map<GetBasketToGameOutput>(foundData);
         }
 
         public async Task<List<GetBasketToGameOutput>> GetAllBasketToGameByBasketId(int id, CancellationToken token)
         {
             var foundData = await _finder.GetAllBasketToGameForCurrentBasket(id, token);
+
             return _mapper.Map<List<GetBasketToGameOutput>>(foundData);
         }
     }

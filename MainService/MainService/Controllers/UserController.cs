@@ -31,8 +31,8 @@ namespace MainService.Controllers
         {
             try
             {
-                /*var mappedData = _mapper.Map<CreateClothes>(clothes);*/
                 await _userService.CreateAsync(user, token);
+
                 return Ok("User created");
             }
             catch (Exception ex)

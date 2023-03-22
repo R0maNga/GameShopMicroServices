@@ -27,8 +27,9 @@ namespace MainService.Controllers
         {
             try
             {
-                var mappedData = _mapper.Map<CreateGameToBasketInput>(basketToGame);
+                var mappedData = _mapper.Map<CreateBasketToGameInput>(basketToGame);
                 await _service.CreateBasketToGame(mappedData, token);
+
                 return Ok("BasketToGame Created");
             }
             catch (Exception e)
@@ -42,13 +43,16 @@ namespace MainService.Controllers
         {
             try
             {
-                var foundData = _service.GetBasketToGameById(basketToGame.Id, token);
+                var foundData = await _service.GetBasketToGameById(basketToGame.Id, token);
                 if (foundData is null)
+
                     return BadRequest();
 
-                var mappedData = _mapper.Map<UpdateGameToBasketInput>(foundData);
+                var mappedData = _mapper.Map<UpdateBasketToGameInput>(foundData);
                 await _service.UpdateBasketToGame(mappedData, token);
+
                 return Ok("BasketToGame Updated");
+
             }
             catch (Exception e)
             {
@@ -61,13 +65,16 @@ namespace MainService.Controllers
         {
             try
             {
-                var foundData = _service.GetBasketToGameById(basketToGame.Id, token);
+                var foundData = await _service.GetBasketToGameById(basketToGame.Id, token);
                 if (foundData is null)
+
                     return BadRequest();
 
-                var mappedData = _mapper.Map<DeleteGameToBasketInput>(foundData);
+                var mappedData = _mapper.Map<DeleteBasketToGameInput>(foundData);
                 await _service.DeleteBasketToGame(mappedData, token);
+
                 return Ok("BasketToGame Deleted");
+
             }
             catch (Exception e)
             {
@@ -80,7 +87,9 @@ namespace MainService.Controllers
             try
             {
                 var basketToGame = await _service.GetAllBasketToGameByBasketId(id, token);
+
                 return Ok(basketToGame);
+
             }
             catch (Exception e)
             {

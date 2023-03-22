@@ -20,13 +20,15 @@ namespace DAL.Finders
         public  Task<BasketToGame> GetById(int id, CancellationToken token)
         {
             var res = AsQueryable();
-            return res.FirstOrDefaultAsync(x => x.Id == id, token)!;
+
+            return res.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, token)!;
         }
 
         public async Task<List<BasketToGame>> GetAllBasketToGameForCurrentBasket(int id, CancellationToken token)
         {
             var res =  AsQueryable();
             var foundBasketToGames= await res.Where(x => x.BasketId == id).ToListAsync(token);
+
             return  foundBasketToGames;
 
         }

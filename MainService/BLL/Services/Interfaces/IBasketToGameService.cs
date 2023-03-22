@@ -11,9 +11,9 @@ namespace BLL.Services.Interfaces
 {
     public interface IBasketToGameService
     {
-        public Task CreateBasketToGame(CreateGameToBasketInput gameToBasket, CancellationToken token);
-        public Task UpdateBasketToGame(UpdateGameToBasketInput gameToBasket, CancellationToken token);
-        public Task DeleteBasketToGame(DeleteGameToBasketInput gameToBasket, CancellationToken token);
+        public Task CreateBasketToGame(CreateBasketToGameInput gameToBasket, CancellationToken token);
+        public Task UpdateBasketToGame(UpdateBasketToGameInput gameToBasket, CancellationToken token);
+        public Task DeleteBasketToGame(DeleteBasketToGameInput gameToBasket, CancellationToken token);
         public Task<GetBasketToGameOutput> GetBasketToGameById(int id, CancellationToken token);
         public Task<List<GetBasketToGameOutput>> GetAllBasketToGameByBasketId(int id, CancellationToken token);
     }

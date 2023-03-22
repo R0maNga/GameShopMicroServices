@@ -19,6 +19,7 @@ namespace BLL.Utils
         {
             var jwtKey = _configuration.GetValue<string>("JwtSettings:Key");
             var keyBytes = Encoding.ASCII.GetBytes(jwtKey);
+
             return keyBytes;
         }
     }

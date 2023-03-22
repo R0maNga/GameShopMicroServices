@@ -35,7 +35,8 @@ namespace BLL.Services
         private readonly ITokenFinder _tokenFinder;
         private readonly IUserFinder _userFinder;
 
-        public TokenService(IGetTokenBytes getToken, IMapper mapper, IHttpContextAccessor httpContext, IUnitOfWork unitOfWork, ITokenRepository tokenRepository, ITokenFinder tokenFinder, IUserFinder userFinder)
+        public TokenService(IGetTokenBytes getToken, IMapper mapper, IHttpContextAccessor httpContext, IUnitOfWork unitOfWork, 
+            ITokenRepository tokenRepository, ITokenFinder tokenFinder, IUserFinder userFinder)
         {
            
             _getToken = getToken;
@@ -47,25 +48,28 @@ namespace BLL.Services
             _userFinder = userFinder;
 
         }
-        //tyt
-        
-        public async Task<AuthenticateResponse?> GetTokenAsync(AuthenticateRequest authenticateRequest, string ipAdress, CancellationToken token)
+
+        public async Task<AuthenticateResponse?> GetTokenAsync(AuthenticateRequest authenticateRequest,
+            string ipAdress, CancellationToken token)
         {
-            var user = _userFinder.GetUserByNameAndPassword(authenticateRequest.UserName, authenticateRequest.Password, token);
+            var user = _userFinder.GetUserByNameAndPassword(authenticateRequest.Username, 
+                authenticateRequest.Password, token);
             if (user is null)
             {
                 return null;
             }
 
             
-            var tokenString =  GenerateToken(user.UserName);
+            var tokenString =  GenerateToken(user.Username);
             var refreshToken = GenerateRefreshToken();
             await SaveTokenDetails(ipAdress, refreshToken, tokenString, user.Id, token);
+
             return new AuthenticateResponse { Token = tokenString, RefreshToken = refreshToken};
         }
 
         //tet
-        private async Task<AuthenticateResponse> SaveTokenDetails(string ipAdress, string refreshToken, string tokenString, int userId, CancellationToken token)
+        private async Task<AuthenticateResponse> SaveTokenDetails(string ipAdress, string refreshToken, string tokenString, 
+            int userId, CancellationToken token)
         {
             var userRefreshTokenOutput = new UserRefreshTokenOutput
             {
@@ -80,6 +84,7 @@ namespace BLL.Services
             var mappedToken = _mapper.Map<UserRefreshToken>(userRefreshTokenOutput);
             _tokenRepository.Create(mappedToken);
             await _unitOfWork.SaveChanges(token);
+
             return new AuthenticateResponse { Token = tokenString, RefreshToken = refreshToken, IsSuccess = true};
         }
 
@@ -87,6 +92,7 @@ namespace BLL.Services
         {
             var refreshToken = GenerateRefreshToken();
             var accessToken = GenerateToken(userName);
+
             return await SaveTokenDetails(ipAdress, refreshToken, accessToken, userId, token );
 
         }
@@ -97,6 +103,7 @@ namespace BLL.Services
             using (var cryptoProvide = new RNGCryptoServiceProvider())
             {
                 cryptoProvide.GetBytes(byteArray);
+
                 return Convert.ToBase64String(byteArray);
             }
         }
@@ -119,12 +126,14 @@ namespace BLL.Services
             };
             var token = tokenHandler.CreateToken(descriptor);
             string tokenString = tokenHandler.WriteToken(token);
+
             return tokenString;
         }
 
         public JwtSecurityToken GetJwtToken(string expiredToken)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
             return tokenHandler.ReadJwtToken(expiredToken);
         }
 
@@ -141,6 +150,7 @@ namespace BLL.Services
         {
             var mappedToken = _mapper.Map<UserRefreshToken>(request);
             _tokenRepository.Update(mappedToken);
+
             return _unitOfWork.SaveChanges(token);
 
         }
@@ -161,9 +171,7 @@ namespace BLL.Services
             {
                 return new AuthenticateResponse { IsSuccess = false, Reason = "Token not expired" };
             }
-
             
-
             return new AuthenticateResponse { IsSuccess = true };
         }
     }

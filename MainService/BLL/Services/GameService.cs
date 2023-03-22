@@ -53,6 +53,7 @@ namespace BLL.Services
         {
            var data = await _gameFinder.GetAllGames(token);
            var mappedGames = _mapper.Map<List<GetGameOutput>>(data);
+
            return mappedGames;
         }
 
@@ -60,6 +61,7 @@ namespace BLL.Services
         {
             var data = await _gameFinder.FindGameById(id, token);
             var mappedGame = _mapper.Map<GetGameOutput>(data);
+
             return mappedGame;
         }
 
@@ -67,6 +69,7 @@ namespace BLL.Services
         {
             var data = await _gameFinder.FindGameByName(name, token);
             var mappedGame = _mapper.Map<GetGameOutput>(data);
+
             return mappedGame;
         }
     }

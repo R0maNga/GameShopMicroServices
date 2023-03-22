@@ -33,7 +33,7 @@ namespace DAL.Finders
         public User? GetUserByNameAndPassword(string password, string userName, CancellationToken token)
         {
             var res = AsQueryable();
-            var user = res.FirstOrDefault(x => x.UserName.Equals(userName)
+            var user = res.FirstOrDefault(x => x.Username.Equals(userName)
                                                                 && x.Password.Equals(password));
             
             return user;

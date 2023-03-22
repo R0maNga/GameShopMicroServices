@@ -28,6 +28,7 @@ namespace MainService.Controllers
             {
                 var mappedGame = _mapper.Map<CreateGameInput>(game);
                 await _gameService.CreateGame(mappedGame, token);
+
                 return Ok("Game Created");
             }
             catch (Exception e)
@@ -41,11 +42,14 @@ namespace MainService.Controllers
         {
             try
             {
-                var foundGame = _gameService.GetGameById(game.Id, token);
+                var foundGame = await _gameService.GetGameById(game.Id, token);
                 if (foundGame is null)
+
                     return BadRequest();
+
                 var mappedGame = _mapper.Map<UpdateGameInput>(game);
                 await _gameService.UpdateGame(mappedGame, token);
+
                 return Ok("Game Updated");
             }
             catch (Exception e)
@@ -59,11 +63,14 @@ namespace MainService.Controllers
         {
             try
             {
-                var foundGane = _gameService.GetGameById(game.Id, token);
+                var foundGane = await _gameService.GetGameById(game.Id, token);
                 if (foundGane is null)
+
                     return BadRequest();
+
                 var mappedGame = _mapper.Map<DeleteGameInput>(foundGane);
                 await _gameService.DeleteGame(mappedGame, token);
+
                 return Ok("Game Deleted");
 
             }
@@ -74,12 +81,13 @@ namespace MainService.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGames(GetGameResponse game, CancellationToken token)
+        public async Task<IActionResult> GetAllGames(CancellationToken token)
         {
             try
             {
                 var foundGames = await _gameService.GetGames(token);
                 var mappedGames = _mapper.Map<IEnumerable<GetGameResponse>>(foundGames);
+
                 return Ok(mappedGames);
 
             }
@@ -95,6 +103,7 @@ namespace MainService.Controllers
             try
             {
               var game =  await _gameService.GetGameById(id, token);
+
               return Ok(game);
             }
             catch (Exception e)
@@ -103,12 +112,13 @@ namespace MainService.Controllers
             }
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("get-games-by-name/{name}")]
         public async Task<IActionResult> GetGameByName(string name, CancellationToken token)
         {
             try
             {
                 var game = await _gameService.GetGameByName(name, token);
+
                 return Ok(game);
             }
             catch (Exception e)

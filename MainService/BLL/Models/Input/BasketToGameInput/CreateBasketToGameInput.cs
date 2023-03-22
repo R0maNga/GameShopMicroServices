@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Models.Input.BasketToGameInput
 {
-    public class CreateGameToBasketInput
+    public class CreateBasketToGameInput
     {
         public int BasketId { get; set; }
         public int GameId { get; set; }

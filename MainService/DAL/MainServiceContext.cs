@@ -28,6 +28,7 @@ namespace DAL
                 .HasForeignKey<Basket>(e=>e.UserId).IsRequired().OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Basket>().HasKey(e => e.Id);
+            
 
             modelBuilder.Entity<Game>().HasKey(e => e.Id);
 
