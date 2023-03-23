@@ -20,7 +20,7 @@ namespace DAL.Finders
         public Task<Order> GetOrderById(int id, CancellationToken token)
         {
             var result = AsQueryable();
-            return result.SingleOrDefaultAsync(x => x.Id == id, token)!;
+            return result.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, token)!;
         }
 
         protected IQueryable<Order> AsQueryable()

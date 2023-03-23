@@ -55,7 +55,7 @@ namespace OrderService.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("confirm-order")]
         public async Task<IActionResult> ConfirmOrder(int id, CancellationToken token)
         {
             try
@@ -71,7 +71,7 @@ namespace OrderService.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("cancel-order")]
         public async Task<IActionResult> CancelOrder(int id, CancellationToken token)
         {
             try
