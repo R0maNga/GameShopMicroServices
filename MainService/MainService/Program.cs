@@ -29,8 +29,8 @@ using UserRefreshTokenProfile = MainService.AutoMapper.UserRefreshTokenProfile;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
-/*ConfigureLogging();
-builder.Host.UseSerilog();*/
+ConfigureLogging();
+builder.Host.UseSerilog();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 // Add services to the container.
