@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public int BasketId { get; set; }
         public int GameId { get; set; }
+        public GameForBasketToGameResponse Price { get; set; }
     }
 }

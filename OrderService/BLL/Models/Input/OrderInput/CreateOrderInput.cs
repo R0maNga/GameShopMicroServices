@@ -8,9 +8,9 @@ namespace BLL.Models.Input.OrderInput
 {
     public class CreateOrderInput
     {
-        public string OrderStatus { get; set; }
-        public int BasketId { get; set; }
 
         public decimal Price { get; set; }
+        public int BasketId { get; set; }
+        public string OrderStatus { get; set; }
     }
 }

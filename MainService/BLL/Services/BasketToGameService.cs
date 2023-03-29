@@ -57,9 +57,9 @@ namespace BLL.Services
             return _mapper.Map<GetBasketToGameOutput>(foundData);
         }
 
-        public async Task<List<GetBasketToGameOutput>> GetAllBasketToGameByBasketId(int id, CancellationToken token)
+        public async Task<List<GetBasketToGameOutput>> GetAllBasketToGameByBasketId(int id, CancellationToken token, bool includeGame = false)
         {
-            var foundData = await _finder.GetAllBasketToGameForCurrentBasket(id, token);
+            var foundData = await _finder.GetAllBasketToGameForCurrentBasket(id, token, includeGame);
 
             return _mapper.Map<List<GetBasketToGameOutput>>(foundData);
         }

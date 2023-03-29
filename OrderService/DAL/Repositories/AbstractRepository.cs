@@ -10,10 +10,16 @@ namespace DAL.Repositories
     public abstract class AbstractRepository<T> where T : class
     {
         private readonly DbSet<T> _dbSet;
+        private readonly OrderServiceContext _context;
 
-        public AbstractRepository(DbSet<T> dbSet)
+        public AbstractRepository(DbSet<T>  dbSet, OrderServiceContext context)
         {
             _dbSet = dbSet;
+            _context = context;
+        }
+        public int SaveChanges()
+        {
+            return _context.SaveChanges();
         }
 
         public virtual void Create(T item)
