@@ -90,14 +90,8 @@ namespace MainService.Controllers
             try
             {
                 var basketToGame = await _service.GetAllBasketToGameByBasketId(id, token, includeGame);
+                var total = _service.CalculateTotalPrice(basketToGame);
                 
-                //вынести отдельно
-                decimal total = 0;
-                foreach (var item in basketToGame)
-                {
-                    total += item.Game.Priсe;
-                }
-
                 Order order = new Order()
                 {
                     Price = total,

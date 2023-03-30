@@ -12,9 +12,5 @@ namespace DAL.Contracts.IRepositories
         void Create (Order order);
         void Update (Order order);
         void Delete (Order order);
-        public int SaveChanges();
-
-
-
     }
 }

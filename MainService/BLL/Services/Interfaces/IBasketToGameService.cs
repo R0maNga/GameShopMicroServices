@@ -16,5 +16,6 @@ namespace BLL.Services.Interfaces
         public Task DeleteBasketToGame(DeleteBasketToGameInput gameToBasket, CancellationToken token);
         public Task<GetBasketToGameOutput> GetBasketToGameById(int id, CancellationToken token);
         public Task<List<GetBasketToGameOutput>> GetAllBasketToGameByBasketId(int id, CancellationToken token, bool includeGame = false);
+        public decimal CalculateTotalPrice(List<GetBasketToGameOutput> basketToGame);
     }
 }

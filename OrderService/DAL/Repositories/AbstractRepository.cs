@@ -17,14 +17,13 @@ namespace DAL.Repositories
             _dbSet = dbSet;
             _context = context;
         }
-        public int SaveChanges()
-        {
-            return _context.SaveChanges();
-        }
 
         public virtual void Create(T item)
         {
+            var transaction = _context.Database.BeginTransaction();
             _dbSet.Add(item);
+            transaction.Commit();
+
         }
 
         public virtual void Update(T item)

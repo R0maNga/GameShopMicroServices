@@ -63,5 +63,16 @@ namespace BLL.Services
 
             return _mapper.Map<List<GetBasketToGameOutput>>(foundData);
         }
+
+        public decimal CalculateTotalPrice(List<GetBasketToGameOutput> basketToGame)
+        {
+            decimal total = 0;
+            foreach (var item in basketToGame)
+            {
+                total += item.Game.Priсe;
+            }
+
+            return total;
+        }
     }
 }

@@ -50,22 +50,15 @@ namespace OrderService
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                // delete
-                var Order  = JsonConvert.DeserializeObject<CreateOrderInput>(message);
                 _eventProcessor.ProcessEvent(message, stoppingToken);
-               // await _dbContext.AddAsync(Order);
-                //await _dbContext.SaveChangesAsync(stoppingToken);
-               //_channel.BasicAck(ea.DeliveryTag, false);
                 Console.WriteLine("Received message: {0}", message);
-                Console.WriteLine(Order.Price.ToString(), Order.BasketId);
-                
             };
             
             _channel.BasicConsume(queue: "hello",
                 autoAck: true,
                 consumer: consumer);
 
-            //await _orderService.Create(Order, stoppingToken);
+            
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(1000, stoppingToken);

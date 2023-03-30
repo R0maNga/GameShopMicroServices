@@ -26,31 +26,24 @@ namespace BLL.Services
 
         public void ProcessEvent(string message, CancellationToken token)
         {
-            
-
-            
-              
-                    AddPlatform(message, token);
-                   
-               
-            
+            AddPlatform(message, token);
         }
 
-        private void AddPlatform(string platformPublishedMessage, CancellationToken token)
+        private async void AddPlatform(string platformPublishedMessage, CancellationToken token)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
                 var repo = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
-               // var unit = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                var unit = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
                 var platformPublishedDto = JsonConvert.DeserializeObject<CreateOrderInput>(platformPublishedMessage);
 
                 try
                 {
-                    //var plat = _mapper.Map<Platform>(platformPublishedDto);
+                    
                     var  mappedOrder = _mapper.Map<Order>(platformPublishedDto);
                     repo.Create(mappedOrder);
-                    repo.SaveChanges();
+                    await unit.SaveChanges(token);
                     
                    
                 }
