@@ -21,10 +21,7 @@ namespace BLL.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public OrderService(
-            IOrderRepository repository,
-            IOrderFinder finder,
-            IMapper mapper,
+        public OrderService(IOrderRepository repository, IOrderFinder finder, IMapper mapper,
             IUnitOfWork unitOfWork)
         {
             _repository = repository;
