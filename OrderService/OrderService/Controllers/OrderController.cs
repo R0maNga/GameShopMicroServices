@@ -46,7 +46,7 @@ namespace OrderService.Controllers
 
                var mappedOrder = _mapper.Map<UpdateOrderInput>(foundOrder);
                await _orderService.Update(mappedOrder, token);
-               return Ok("Order Updated");
+               return Ok("Order Update");
 
             }
             catch (Exception e)
