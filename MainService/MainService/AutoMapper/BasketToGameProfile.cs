@@ -20,7 +20,9 @@ namespace MainService.AutoMapper
                 CreateMap<DeleteBasketToGameRequest, DeleteBasketToGameInput>();
 
                 CreateMap<GetBasketToGameOutput, DeleteBasketToGameInput>();
-                
+
+                CreateMap<GameForBusketToGameOutput, GameForBasketToGameResponse>();
+
             }
         }
     }

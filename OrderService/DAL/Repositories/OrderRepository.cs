@@ -11,8 +11,8 @@ namespace DAL.Repositories
 {
     public class OrderRepository : AbstractRepository<Order>, IOrderRepository
     {
-        
-        public OrderRepository(DbSet<Order> _dbSet) : base(_dbSet)
+
+        public OrderRepository(OrderServiceContext _context, DbSet<Order> _dbSet) : base(_dbSet,_context )
         {
             
         }

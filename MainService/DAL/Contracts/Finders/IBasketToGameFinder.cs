@@ -10,6 +10,6 @@ namespace DAL.Contracts.Finders
     public interface IBasketToGameFinder
     {
         Task<BasketToGame> GetById(int id, CancellationToken token);
-        Task<List<BasketToGame>> GetAllBasketToGameForCurrentBasket(int id, CancellationToken token);
+        Task<List<BasketToGame>> GetAllBasketToGameForCurrentBasket(int id,  CancellationToken token ,bool includeGame = false);
     }
 }
