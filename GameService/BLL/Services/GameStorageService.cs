@@ -20,7 +20,7 @@ namespace BLL.Services
         private readonly IGameStorageFinder _finder;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-
+        
         public GameStorageService(IGameStorageRepository repository, IGameStorageFinder finder, IMapper mapper, 
             IUnitOfWork unitOfWork)
         {
