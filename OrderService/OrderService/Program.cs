@@ -17,10 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
 ConfigureLogging();
 builder.Host.UseSerilog();
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
@@ -45,7 +44,7 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .AllowCredentials());
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
