@@ -19,9 +19,6 @@ namespace BLL.Services
         public BackGroundConsumerForValidationOrders(IOrderHostedService orderHostedService)
         {
             _orderHostedService = orderHostedService;
-
-
-
             Init();
         }
         private void Init()
@@ -34,9 +31,6 @@ namespace BLL.Services
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
-
-
-
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

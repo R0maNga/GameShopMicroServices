@@ -39,23 +39,20 @@ namespace BLL.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                var repo = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
-                var unit = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                var repository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
                 var platformPublishedDto = JsonConvert.DeserializeObject<CreateOrderInput>(platformPublishedMessage);
 
                 try
                 {
-                    
                     var  mappedOrder = _mapper.Map<Order>(platformPublishedDto);
-                    repo.Create(mappedOrder);
-                    await unit.SaveChanges(token);
-                    
-                   
+                    repository.Create(mappedOrder);
+                    await unitOfWork.SaveChanges(token);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Coud not platform to DB{e.Message}");
+                    Console.WriteLine($"{e.Message}");
                     throw;
                 }
             }
@@ -65,9 +62,9 @@ namespace BLL.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                var repo = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
-                var unit = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-                var finder = scope.ServiceProvider.GetRequiredService<IOrderFinder>();
+                var repository = scope.ServiceProvider.GetRequiredService<IOrderRepository>();
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                var orderFinder = scope.ServiceProvider.GetRequiredService<IOrderFinder>();
 
                 var platformPublishedDto = JsonConvert.DeserializeObject<CreateOrderInput>(platformPublishedMessage);
 
@@ -75,16 +72,16 @@ namespace BLL.Services
                 {
 
                     var mappedOrder = _mapper.Map<Order>(platformPublishedDto);
-                    var foundOrder = await finder.GetLastWaitingOrder(token);
+                    var foundOrder = await orderFinder.GetLastWaitingOrder(token);
                     foundOrder.OrderStatus = mappedOrder.OrderStatus;
-                    repo.Update(foundOrder);
-                    await unit.SaveChanges(token);
+                    repository.Update(foundOrder);
+                    await unitOfWork.SaveChanges(token);
 
 
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Coud not platform to DB{e.Message}");
+                    Console.WriteLine($"{e.Message}");
                     throw;
                 }
             }

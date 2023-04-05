@@ -20,12 +20,14 @@ namespace DAL.Finders
         public Task<Order> GetOrderById(int id, CancellationToken token)
         {
             var result = AsQueryable();
+
             return result.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id, token)!;
         }
 
         public Task<Order> GetLastWaitingOrder(CancellationToken token)
         {
             var result = AsQueryable();
+
             return result.AsNoTracking().OrderBy(x => x.Id).LastOrDefaultAsync(x => x.OrderStatus == "waiting", token)!;
             
         }

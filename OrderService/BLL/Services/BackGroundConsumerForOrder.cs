@@ -17,16 +17,11 @@ namespace OrderService
     {
         private  IConnection _connection;
         private  IModel _channel;
-        private readonly IOrderHostedService _eventProcessor;
-
-
-
-        public BackGroundConsumerForOrder(IOrderHostedService eventProcessor)
+        private readonly IOrderHostedService _orderHostedService;
+        
+        public BackGroundConsumerForOrder(IOrderHostedService orderHostedService)
         {
-            _eventProcessor = eventProcessor;
-            
-            
-
+            _orderHostedService = orderHostedService;
             Init();
         }   
         private void  Init()
@@ -39,9 +34,6 @@ namespace OrderService
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
-
-            
-
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -52,7 +44,7 @@ namespace OrderService
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                _eventProcessor.ProcessEvent(message, stoppingToken);
+                _orderHostedService.ProcessEvent(message, stoppingToken);
                 Console.WriteLine("Received message: {0}", message);
             };
             
