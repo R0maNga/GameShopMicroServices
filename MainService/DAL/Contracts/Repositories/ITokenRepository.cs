@@ -11,6 +11,6 @@ namespace DAL.Contracts.Repositories
     {
         void Create(UserRefreshToken token);
         void Update(UserRefreshToken token);
-        /*void Delete(UserRefreshToken token);*/
+        void Delete(UserRefreshToken token);
     }
 }

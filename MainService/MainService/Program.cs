@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using BLL.AutoMapper;
 using BLL.Services;
 using BLL.Services.Interfaces;
 using BLL.Utils;
@@ -20,13 +21,16 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using UserRefreshTokenProfile = BLL.AutoMapper.UserRefreshTokenProfile;
+using BasketProfile = MainService.AutoMapper.BasketProfile;
+using BasketToGameProfile = MainService.AutoMapper.BasketToGameProfile;
+using GameProfile = MainService.AutoMapper.GameProfile;
+using UserRefreshTokenProfile = MainService.AutoMapper.UserRefreshTokenProfile;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
-/*ConfigureLogging();
-builder.Host.UseSerilog();*/
+ConfigureLogging();
+builder.Host.UseSerilog();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 // Add services to the container.
@@ -35,8 +39,6 @@ builder.Services.AddDbContext<MainServiceContext>(options =>
     options.UseSqlServer(connection));
 
 
-/*var jwtKey = builder.Configuration.GetValue<string>("JwtSettings:Key");
-var keyBytes = Encoding.ASCII.GetBytes(jwtKey);*/
 
 IGetTokenBytes getTokenBytes = new GetTokenBytes(builder.Configuration);
 TokenValidationParameters tokenValidation = new TokenValidationParameters
@@ -71,11 +73,27 @@ builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<ITokenRepository, TokenRepository>();
 builder.Services.AddTransient<ITokenFinder, TokenFinder>();
 builder.Services.AddTransient<IGetTokenBytes, GetTokenBytes>();
-builder.Services.AddTransient(provider => provider.GetRequiredService<MainServiceContext>().UserEntities);
 
+builder.Services.AddTransient(provider => provider.GetRequiredService<MainServiceContext>().UserEntities);
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IUserFinder, UserFinder>();
 builder.Services.AddTransient<IUserService, UserService>();
+
+builder.Services.AddTransient(provider => provider.GetRequiredService<MainServiceContext>().Games);
+builder.Services.AddTransient<IGameRepository, GameRepository>();
+builder.Services.AddTransient<IGameFinder, GameFinder>();
+builder.Services.AddTransient<IGameService, GameService>();
+
+builder.Services.AddTransient(provider => provider.GetRequiredService<MainServiceContext>().BasketToGames);
+builder.Services.AddTransient<IBasketToGameRepository, BasketToGameRepository>();
+builder.Services.AddTransient<IBasketToGameFinder, BasketToGameFinder>();
+builder.Services.AddTransient<IBasketToGameService, BasketToGameService>();
+
+builder.Services.AddTransient(provider => provider.GetRequiredService<MainServiceContext>().Baskets);
+builder.Services.AddTransient<IBasketRepository, BasketRepository>();
+builder.Services.AddTransient<IBasketFinder, BasketFinder>();
+builder.Services.AddTransient<IBasketService, BasketService>();
+
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 
@@ -83,7 +101,11 @@ builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(typeof(UserRefreshTokenProfile), typeof(RefreshTokenProfile), typeof(MainService.AutoMapper.UserRefreshTokenProfile));
+builder.Services.AddAutoMapper(typeof(BasketToGameProfile), typeof(RefreshTokenProfile), typeof(UserRefreshTokenProfile),
+    typeof(GameProfile), typeof(BasketProfile));
+
+builder.Services.AddAutoMapper(typeof(BLL.AutoMapper.UserRefreshTokenProfile), typeof(BLL.AutoMapper.BasketToGameProfile),
+    typeof(UserProfile), typeof(BLL.AutoMapper.GameProfile), typeof(BLL.AutoMapper.BasketProfile));
 var app = builder.Build();
 
 app.UseCors(x => x

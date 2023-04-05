@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Models.Input.UserInput;
+using MainService.Models.Request.RefreshTokenRequest;
+using RefreshTokenRequest = BLL.Models.Input.UserInput.RefreshTokenRequest;
 
 namespace MainService.AutoMapper
 {
@@ -9,8 +11,8 @@ namespace MainService.AutoMapper
         {
             public MappingProfile()
             {
-                CreateMap<RefreshTokenRequest, Models.Request.RefreshTokenRequest>();
-                CreateMap<Models.Request.RefreshTokenRequest, RefreshTokenRequest>();
+                CreateMap<RefreshTokenRequest, Models.Request.RefreshTokenRequest.RefreshTokenRequest>();
+                CreateMap<Models.Request.RefreshTokenRequest.RefreshTokenRequest,RefreshTokenRequest >();
             }
         }
     }

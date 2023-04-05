@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Models.Output.RefreshTokenOutput;
-using MainService.Models.Response;
+using MainService.Models.Response.RefreshTokenResponse;
 
 namespace MainService.AutoMapper
 {

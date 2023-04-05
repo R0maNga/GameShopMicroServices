@@ -6,10 +6,9 @@ using BLL.Models.Output.RefreshTokenOutput;
 using BLL.Models.Output.UserOutput;
 using BLL.Services;
 using BLL.Services.Interfaces;
-using MainService.Models.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RefreshTokenRequest = MainService.Models.Request.RefreshTokenRequest;
+using RefreshTokenRequest = MainService.Models.Request.RefreshTokenRequest.RefreshTokenRequest;
 
 namespace MainService.Controllers
 {
@@ -32,6 +31,7 @@ namespace MainService.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(new AuthenticateResponse
+
                     { IsSuccess = false, Reason = "UserName and Password must be provided" });
             }
             var authResponse = await _tokenService.GetTokenAsync(authRequest, HttpContext.Connection.RemoteIpAddress!.ToString(), token);
@@ -46,7 +46,7 @@ namespace MainService.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> RefreshToken([FromBody] MainService.Models.Request.RefreshTokenRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -67,6 +67,7 @@ namespace MainService.Controllers
 
             var userName = token.Claims.First(x => x.Type == JwtRegisteredClaimNames.NameId).Value;
             var authResponse = await _tokenService.GetRefreshTokenAsync(tokenOutput.IpAdress,tokenOutput.Id, userName, cancellationToken);
+
             return Ok(authResponse);
 
         }

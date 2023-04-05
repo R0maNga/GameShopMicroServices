@@ -26,13 +26,14 @@ namespace DAL.Finders
         public Task<User> GetByIdAsync(int id, CancellationToken token)
         {
             var res = AsQueryable();
+
             return res.FirstOrDefaultAsync(x => x.Id == id, token)!;
         }
 
         public User? GetUserByNameAndPassword(string password, string userName, CancellationToken token)
         {
             var res = AsQueryable();
-            var user = res.FirstOrDefault(x => x.UserName.Equals(userName)
+            var user = res.FirstOrDefault(x => x.Username.Equals(userName)
                                                                 && x.Password.Equals(password));
             
             return user;

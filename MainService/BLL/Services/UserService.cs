@@ -12,19 +12,16 @@ namespace BLL.Services
 {
     public class UserService : IUserService
     {
-        private readonly MainServiceContext _context;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
         
 
         public UserService(
-            MainServiceContext context,
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IUserRepository userRepository)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userRepository = userRepository;

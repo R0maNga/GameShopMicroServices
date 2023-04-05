@@ -1,22 +1,50 @@
 using System.Reflection;
+using BLL.Services.Interfaces;
+using DAL;
+using DAL.Contracts.IFinders;
+using DAL.Contracts.IRepositories;
+using DAL.Contracts.IUnitOfWork;
+using DAL.Finders;
+using DAL.Repositories;
+using DAL.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using OrderService.Mapper;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
 ConfigureLogging();
 builder.Host.UseSerilog();
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+builder.Services.AddDbContext<OrderServiceContext>(options =>
+    options.UseSqlServer(connection));
 
+builder.Services.AddTransient(provider => provider.GetRequiredService<OrderServiceContext>().Orders);
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddTransient<IOrderFinder, OrderFinder>();
+builder.Services.AddTransient<IOrderService, BLL.Services.OrderService>();
+
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddAutoMapper(typeof(OrderProfile));
+
+builder.Services.AddAutoMapper(typeof(BLL.AutoMapper.OrderProfile));
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCors(x => x
+    .SetIsOriginAllowed(origin => true)
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials());
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

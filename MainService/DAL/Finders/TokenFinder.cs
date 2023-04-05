@@ -28,6 +28,7 @@ namespace DAL.Finders
                      && x.Token == token 
                      && x.RefreshToken == refreshToken
                      && x.IpAdress == ipAdress);
+
             return userRefreshToken;
         }
 

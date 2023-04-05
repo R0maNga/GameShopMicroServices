@@ -1,21 +1,48 @@
 using System.Reflection;
+using BLL.Services;
+using BLL.Services.Interfaces;
+using DAL;
+using DAL.Contracts.IFinder;
+using DAL.Contracts.Repositories;
+using DAL.Contracts.UnitOfWork;
+using DAL.Finders;
+using DAL.Repositories;
+using DAL.UnitOfWork;
+using GameService.AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
+var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
 ConfigureLogging();
 builder.Host.UseSerilog();
-// Add services to the container.
+
+builder.Services.AddDbContext<GameStorageContext>(options =>
+    options.UseSqlServer(connection));
+
+builder.Services.AddAutoMapper(typeof(GameStorageProfile));
+
+builder.Services.AddAutoMapper(typeof(BLL.AutoMapper.GameStorageProfile));
+
+builder.Services.AddTransient(provider => provider.GetRequiredService<GameStorageContext>().GameStorages);
+builder.Services.AddTransient<IGameStorageRepository, GameStorageRepository>();
+builder.Services.AddTransient<IGameStorageFinder, GameStorageFinder>();
+builder.Services.AddTransient<IGameStorageService, GameStorageService>();
+
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
