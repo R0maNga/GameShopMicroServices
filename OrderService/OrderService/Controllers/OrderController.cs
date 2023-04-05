@@ -27,6 +27,7 @@ namespace OrderService.Controllers
             {
                 var mappedData = _mapper.Map<CreateOrderInput>(order);
                 await _orderService.Create(mappedData, token);
+
                 return Ok("Order Created");
             }
             catch (Exception e)
@@ -42,10 +43,12 @@ namespace OrderService.Controllers
             {
                var foundOrder = await _orderService.GetOrderById(order.Id, token);
                if (foundOrder is null)
+
                    return BadRequest();
 
                var mappedOrder = _mapper.Map<UpdateOrderInput>(foundOrder);
                await _orderService.Update(mappedOrder, token);
+
                return Ok("Order Update");
 
             }
@@ -62,6 +65,7 @@ namespace OrderService.Controllers
             {
                 
                 await _orderService.ConfirmOrder(id, token);
+
                 return Ok("Order Confirmed");
 
             }
@@ -78,6 +82,7 @@ namespace OrderService.Controllers
             {
 
                 await _orderService.CancelOrder(id, token);
+
                 return Ok("Order Canceled");
 
             }

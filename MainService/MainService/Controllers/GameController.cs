@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Models.Input.GameInput;
+using BLL.Models.Output.GameOutput;
 using BLL.Services.Interfaces;
 using MainService.Models.Request.GemeRequest;
 using MainService.Models.Response.GameResponse;
@@ -14,11 +15,13 @@ namespace MainService.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IGameService _gameService;
+        private readonly IMessageProducer _messageProducer;
 
-        public GameController(IMapper mapper, IGameService gameService)
+        public GameController(IMapper mapper, IGameService gameService, IMessageProducer messageProducer)
         {
             _mapper = mapper;
             _gameService = gameService;
+            _messageProducer = messageProducer;
         }
 
         [HttpPost]
@@ -28,6 +31,9 @@ namespace MainService.Controllers
             {
                 var mappedGame = _mapper.Map<CreateGameInput>(game);
                 await _gameService.CreateGame(mappedGame, token);
+                var gameByName = await _gameService.GetGameByName(mappedGame.Name, token);
+                var mappedModel = _mapper.Map<GameOutputForGameService>(gameByName);
+                _messageProducer.SendMessage(mappedModel, "games");
 
                 return Ok("Game Created");
             }

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.Models.Input.BasketToGameInput
+namespace BLL.Models.GameStorageInput
 {
-    public class CreateBasketToGameInput
+    public class ValidateOrderInput
     {
         public int BasketId { get; set; }
-        public int GameId { get; set; }
-        public int GameAmount { get; set; }
+        public string OrderStatus { get; set; }
     }
 }

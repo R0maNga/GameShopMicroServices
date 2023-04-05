@@ -18,8 +18,8 @@ using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
-/*ConfigureLogging();
-builder.Host.UseSerilog();*/
+ConfigureLogging();
+builder.Host.UseSerilog();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -36,15 +36,14 @@ builder.Services.AddTransient<IOrderFinder, OrderFinder>();
 builder.Services.AddTransient<IOrderService, BLL.Services.OrderService>();
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-builder.Services.AddHostedService<Test>();
+builder.Services.AddHostedService<BackGroundConsumerForOrder>();
+builder.Services.AddHostedService<BackGroundConsumerForValidationOrders>();
 builder.Services.AddSingleton<IOrderHostedService, OrderHostedService>();
 
 builder.Services.AddAutoMapper(typeof(OrderProfile));
 
 builder.Services.AddAutoMapper(typeof(BLL.AutoMapper.OrderProfile));
 
-/*Test asd = new Test();
-asd.Dosmth();*/
 
 var app = builder.Build();
 

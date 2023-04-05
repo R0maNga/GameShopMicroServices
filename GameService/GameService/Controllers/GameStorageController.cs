@@ -15,6 +15,7 @@ namespace GameService.Controllers
         private readonly IGameStorageService _gameStorageService;
         private readonly IMapper _mapper;
 
+
         public GameStorageController(IGameStorageService gameStorageService, IMapper mapper)
         {
             _gameStorageService = gameStorageService;
@@ -28,6 +29,7 @@ namespace GameService.Controllers
             {
                 var mappedData = _mapper.Map<CreateGameStorageInput>(gameStorage);
                 await _gameStorageService.Create(mappedData, token);
+
                 return Ok("GameStorageCreated");
             }
             catch (Exception e)
@@ -43,6 +45,7 @@ namespace GameService.Controllers
             {
                 var foundedGameStorage = await _gameStorageService.GetGameStorageById(gameStorage.Id, token);
                 if (foundedGameStorage is null)
+
                     return BadRequest("Bad Id");
                     
                 

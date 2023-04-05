@@ -8,8 +8,6 @@ namespace BLL.Services.Interfaces
 {
     public interface IMessageProducer
     {
-        
         void SendMessage<T>(T message, string queueName);
-        
     }
 }

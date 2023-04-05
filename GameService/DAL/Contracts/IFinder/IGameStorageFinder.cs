@@ -10,5 +10,6 @@ namespace DAL.Contracts.IFinder
     public interface IGameStorageFinder
     {
         public Task<GameStorage> FindGameStorageById(int id, CancellationToken token);
+        public Task<GameStorage> FindGameStorageByGameId(int id, CancellationToken token);
     }
 }

@@ -9,18 +9,18 @@ using RabbitMQ.Client;
 
 namespace BLL.Services
 {
-    public class MessageProducer:IMessageProducer
+    public class MessageProducer : IMessageProducer
     {
         public void SendMessage<T>(T message, string queueName)
         {
-            var factory = new ConnectionFactory { HostName = "localhost" }; 
+            var factory = new ConnectionFactory { HostName = "localhost" };
             var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
             channel.QueueDeclare(queue: queueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null);
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null);
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);

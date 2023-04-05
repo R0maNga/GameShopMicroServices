@@ -91,7 +91,8 @@ namespace MainService.Controllers
             {
                 var basketToGame = await _service.GetAllBasketToGameByBasketId(id, token, includeGame);
                 var total = _service.CalculateTotalPrice(basketToGame);
-                
+
+               
                 Order order = new Order()
                 {
                     Price = total,
@@ -99,8 +100,10 @@ namespace MainService.Controllers
                     OrderStatus = "waiting"
 
                 };
-                
-                _messageProducer.SendMessage(order);
+
+                 _messageProducer.SendMessage(order,"hello");
+                 _service.SendGamesToStorage(basketToGame);
+
                 return Ok(basketToGame);
 
             }

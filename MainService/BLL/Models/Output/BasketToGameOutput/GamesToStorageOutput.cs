@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.Models.Input.BasketToGameInput
+namespace BLL.Models.Output.BasketToGameOutput
 {
-    public class UpdateBasketToGameInput
+    public class GamesToStorageOutput
     {
+        public string Name { get; set; }
         public int Id { get; set; }
-        
+        public int SoldGames { get; set; }
         public int BasketId { get; set; }
-        public int GameId { get; set; }
-        public int GameAmount { get; set; }
     }
 }

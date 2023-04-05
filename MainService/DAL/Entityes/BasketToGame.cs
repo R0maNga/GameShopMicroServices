@@ -11,6 +11,7 @@ namespace DAL.Entityes
         public int Id { get; set; }
         public int BasketId { get; set; }
         public int GameId { get; set; }
+        public int GameAmount { get; set; }
         public Basket Basket { get; set; }
         public Game Game { get; set; }
     }

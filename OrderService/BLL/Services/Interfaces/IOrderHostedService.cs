@@ -10,6 +10,7 @@ namespace BLL.Services.Interfaces
     {
         
             void ProcessEvent(string message, CancellationToken token);
+            void ValidateOrder(string message, CancellationToken token);
         
     }
 }

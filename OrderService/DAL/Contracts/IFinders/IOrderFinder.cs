@@ -10,5 +10,6 @@ namespace DAL.Contracts.IFinders
     public interface IOrderFinder
     {
         public Task<Order> GetOrderById(int id, CancellationToken token);
+        public Task<Order> GetLastWaitingOrder(CancellationToken token);
     }
 }

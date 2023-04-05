@@ -20,6 +20,14 @@ namespace BLL.AutoMapper
                 CreateMap<UpdateGameInput, Game>();
                 CreateMap<DeleteGameInput, Game>();
                 CreateMap<Game, GetGameOutput>();
+                CreateMap<GetGameOutput, GameOutputForGameService>()
+                    .ForMember(dest => dest.SoldGames, opt => opt.MapFrom(src => 0))
+                    .ForMember(dest => dest.GameId, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.GamesInStorage, opt => opt.MapFrom(src => src.Quantity))
+                    .ForMember(dest => dest.GameName, opt => opt.MapFrom(src => src.Name))
+                    .ForSourceMember(source => source.Discription, o => o.DoNotValidate());
+
+
             }
         }
     }

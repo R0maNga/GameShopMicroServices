@@ -3,15 +3,17 @@ using System.Text;
 using BLL.Models.Input.OrderInput;
 using BLL.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using IModel = RabbitMQ.Client.IModel;
 
 
 namespace OrderService
-{
-    public class Test: BackgroundService
+{  
+    public class BackGroundConsumerForOrder : BackgroundService
     {
         private  IConnection _connection;
         private  IModel _channel;
@@ -19,7 +21,7 @@ namespace OrderService
 
 
 
-        public Test(IOrderHostedService eventProcessor)
+        public BackGroundConsumerForOrder(IOrderHostedService eventProcessor)
         {
             _eventProcessor = eventProcessor;
             

@@ -32,8 +32,11 @@ builder.Services.AddTransient<IGameStorageFinder, GameStorageFinder>();
 builder.Services.AddTransient<IGameStorageService, GameStorageService>();
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IMessageProducer, MessageProducer>();
 
-
+builder.Services.AddHostedService<BackgroundConsumer>();
+builder.Services.AddHostedService<BackgroundConsumerForGameCheck>();
+builder.Services.AddSingleton<IGamesHostedService, GamesHostedService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
