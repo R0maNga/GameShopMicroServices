@@ -12,6 +12,7 @@ using DAL.Contracts.UnitOfWork;
 using DAL.Finders;
 using DAL.Repositories;
 using DAL.UnitOfWork;
+using MainService;
 using MainService.AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -94,6 +95,8 @@ builder.Services.AddTransient<IBasketRepository, BasketRepository>();
 builder.Services.AddTransient<IBasketFinder, BasketFinder>();
 builder.Services.AddTransient<IBasketService, BasketService>();
 
+builder.Services.AddTransient<IMessageProducer, MessageProducer>();
+
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 
@@ -106,6 +109,9 @@ builder.Services.AddAutoMapper(typeof(BasketToGameProfile), typeof(RefreshTokenP
 
 builder.Services.AddAutoMapper(typeof(BLL.AutoMapper.UserRefreshTokenProfile), typeof(BLL.AutoMapper.BasketToGameProfile),
     typeof(UserProfile), typeof(BLL.AutoMapper.GameProfile), typeof(BLL.AutoMapper.BasketProfile));
+
+/*Test asd = new Test();*/
+/*asd.Dosmth();*/
 var app = builder.Build();
 
 app.UseCors(x => x

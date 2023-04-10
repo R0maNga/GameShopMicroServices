@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Entities
+namespace BLL.Models.GameStorageInput
 {
-    public class Order
+    public class ValidateOrderInput
     {
-        public int Id { get; set; }
-        public decimal Price { get; set; }
         public int BasketId { get; set; }
         public string OrderStatus { get; set; }
     }

@@ -1,4 +1,5 @@
 using System.Reflection;
+using BLL.Services;
 using BLL.Services.Interfaces;
 using DAL;
 using DAL.Contracts.IFinders;
@@ -8,10 +9,12 @@ using DAL.Finders;
 using DAL.Repositories;
 using DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using OrderService;
 using OrderService.Mapper;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
@@ -32,10 +35,15 @@ builder.Services.AddTransient<IOrderFinder, OrderFinder>();
 builder.Services.AddTransient<IOrderService, BLL.Services.OrderService>();
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddHostedService<BackGroundConsumerForOrder>();
+builder.Services.AddHostedService<BackGroundConsumerForValidationOrders>();
+builder.Services.AddSingleton<IOrderHostedService, OrderHostedService>();
 
 builder.Services.AddAutoMapper(typeof(OrderProfile));
 
 builder.Services.AddAutoMapper(typeof(BLL.AutoMapper.OrderProfile));
+
+
 var app = builder.Build();
 
 app.UseCors(x => x

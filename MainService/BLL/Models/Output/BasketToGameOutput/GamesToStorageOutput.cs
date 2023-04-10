@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Entities
+namespace BLL.Models.Output.BasketToGameOutput
 {
-    public class Order
+    public class GamesToStorageOutput
     {
+        public string Name { get; set; }
         public int Id { get; set; }
-        public decimal Price { get; set; }
+        public int SoldGames { get; set; }
         public int BasketId { get; set; }
-        public string OrderStatus { get; set; }
     }
 }

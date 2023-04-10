@@ -4,6 +4,7 @@ using BLL.Services;
 using BLL.Services.Interfaces;
 using DAL.Contracts.Finders;
 using MainService.Models.Request.BasketToGameRequest;
+using MainService.Models.Response.BasketToGameResponse;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Diagnostics;
 
@@ -15,11 +16,13 @@ namespace MainService.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IBasketToGameService _service;
+        private readonly IMessageProducer _messageProducer;
 
-        public BasketToGameController(IMapper mapper, IBasketToGameService service)
+        public BasketToGameController(IMapper mapper, IBasketToGameService service, IMessageProducer message)
         {
             _mapper = mapper;
             _service = service;
+            _messageProducer = message;
         }
 
         [HttpPost]
@@ -82,11 +85,24 @@ namespace MainService.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBasketToGameByBasketId(int id, CancellationToken token)
+        public async Task<IActionResult> GetBasketToGameByBasketId(int id, CancellationToken token, bool includeGame = true)
         {
             try
             {
-                var basketToGame = await _service.GetAllBasketToGameByBasketId(id, token);
+                var basketToGame = await _service.GetAllBasketToGameByBasketId(id, token, includeGame);
+                var total = _service.CalculateTotalPrice(basketToGame);
+
+               
+                Order order = new Order()
+                {
+                    Price = total,
+                    BasketId = basketToGame[0].BasketId,
+                    OrderStatus = "waiting"
+
+                };
+
+                 _messageProducer.SendMessage(order,"hello");
+                 _service.SendGamesToStorage(basketToGame);
 
                 return Ok(basketToGame);
 

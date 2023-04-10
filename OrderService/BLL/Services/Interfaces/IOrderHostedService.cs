@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Services.Interfaces
+{
+    public interface IOrderHostedService
+    {
+        
+            void ProcessEvent(string message, CancellationToken token);
+            void ValidateOrder(string message, CancellationToken token);
+        
+    }
+}

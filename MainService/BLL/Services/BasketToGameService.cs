@@ -20,14 +20,15 @@ namespace BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IBasketToGameFinder _finder;
-
+        private readonly IMessageProducer _producer;
         public BasketToGameService(IBasketToGameRepository repository, IUnitOfWork unitOfWork, IMapper mapper, 
-            IBasketToGameFinder finder)
+            IBasketToGameFinder finder, IMessageProducer producer)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _finder = finder;
+            _producer = producer;
         }
         public async Task CreateBasketToGame(CreateBasketToGameInput gameToBasket, CancellationToken token)
         {
@@ -57,11 +58,38 @@ namespace BLL.Services
             return _mapper.Map<GetBasketToGameOutput>(foundData);
         }
 
-        public async Task<List<GetBasketToGameOutput>> GetAllBasketToGameByBasketId(int id, CancellationToken token)
+        public async Task<List<GetBasketToGameOutput>> GetAllBasketToGameByBasketId(int id, CancellationToken token, bool includeGame = false)
         {
-            var foundData = await _finder.GetAllBasketToGameForCurrentBasket(id, token);
+            var foundData = await _finder.GetAllBasketToGameForCurrentBasket(id, token, includeGame);
 
             return _mapper.Map<List<GetBasketToGameOutput>>(foundData);
+        }
+
+        public void SendGamesToStorage(List<GetBasketToGameOutput> basketToGame)
+        {
+            var gamesToStorageOutputs = new List<GamesToStorageOutput> ();
+            foreach (var games in basketToGame)
+            {
+                var item = new GamesToStorageOutput();
+                item.Name = games.Game.Name;
+                item.Id = games.GameId;
+                item.SoldGames = games.GameAmount;
+                item.BasketId = games.BasketId;
+                gamesToStorageOutputs.Add(item);
+
+            }
+            _producer.SendMessage(gamesToStorageOutputs, "GameStorage");
+        }
+
+        public decimal CalculateTotalPrice(List<GetBasketToGameOutput> basketToGame)
+        {
+            decimal total = 0;
+            foreach (var item in basketToGame)
+            {
+                total += item.Game.Priсe;
+            }
+
+            return total;
         }
     }
 }

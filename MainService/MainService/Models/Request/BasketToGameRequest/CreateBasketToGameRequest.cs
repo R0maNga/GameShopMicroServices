@@ -4,5 +4,6 @@
     {
         public int BasketId { get; set; }
         public int GameId { get; set; }
+        public int GameAmount { get; set; }
     }
 }

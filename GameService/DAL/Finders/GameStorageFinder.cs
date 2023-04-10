@@ -20,7 +20,15 @@ namespace DAL.Finders
         public Task<GameStorage> FindGameStorageById(int id, CancellationToken token)
         {
             var data = AsQueryable();
+
             return data.AsNoTracking().SingleOrDefaultAsync(x=>x.Id==id, token)!;
+        }
+
+        public Task<GameStorage> FindGameStorageByGameId(int id, CancellationToken token)
+        {
+            var data = AsQueryable();
+
+            return data.AsNoTracking().SingleOrDefaultAsync(x => x.GameId == id, token)!;
         }
 
         protected  IQueryable<GameStorage> AsQueryable()

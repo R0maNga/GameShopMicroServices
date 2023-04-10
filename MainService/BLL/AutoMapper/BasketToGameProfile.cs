@@ -7,6 +7,7 @@ using AutoMapper;
 using BLL.Models.Input.BasketToGameInput;
 using BLL.Models.Output.BasketToGameOutput;
 using DAL.Entityes;
+using Microsoft.Extensions.Options;
 
 namespace BLL.AutoMapper
 {
@@ -20,6 +21,9 @@ namespace BLL.AutoMapper
                 CreateMap<UpdateBasketToGameInput, BasketToGame>();
                 CreateMap<DeleteBasketToGameInput, BasketToGame>();
                 CreateMap<BasketToGame, GetBasketToGameOutput>();
+
+                CreateMap<Game, GameForBusketToGameOutput>();
+
             }
         }
     }
