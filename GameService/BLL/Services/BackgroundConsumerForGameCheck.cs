@@ -40,7 +40,7 @@ namespace BLL.Services
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                _gameService.GameEvent(message, stoppingToken);
+                _gameService.CheckGameStorageEvent(message, stoppingToken);
                 Console.WriteLine("Received message: {0}", message);
             };
 

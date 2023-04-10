@@ -8,7 +8,7 @@ namespace BLL.Services.Interfaces
 {
     public interface IGamesHostedService
     {
-        void ProcessEvent(string message, CancellationToken token);
-        void GameEvent(string message, CancellationToken token);
+        void CheckGameStorageEvent(string message, CancellationToken token);
+        void AddGameEvent(string message, CancellationToken token);
     }
 }
