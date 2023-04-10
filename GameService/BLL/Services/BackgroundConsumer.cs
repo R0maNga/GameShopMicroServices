@@ -44,7 +44,7 @@ namespace BLL.Services
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
-                _gameService.ProcessEvent(message, stoppingToken);
+                _gameService.AddGameEvent(message, stoppingToken);
                 Console.WriteLine("Received message: {0}", message);
             };
 
