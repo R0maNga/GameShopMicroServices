@@ -1,0 +1,17 @@
+﻿version: "3"
+services:
+  spark:
+    image: apache/spark:latest
+    environment:
+      - ENABLE_INIT_DAEMON=false
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - spark
+    environment:
+      - SPARK_MASTER=spark://spark:7077

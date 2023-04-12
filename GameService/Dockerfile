@@ -7,14 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY *.csproj ./
-RUN dotnet restore
+COPY ["GameService/GameService.csproj", "GameService/"]
+COPY ["BLL/BLL.csproj", "BLL/"]
+COPY ["DAL/DAL.csproj", "DAL/"]
+RUN dotnet restore "GameService/GameService.csproj"
 COPY . .
-WORKDIR "/src"
+WORKDIR "/src/GameService"
 RUN dotnet build "GameService.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "GameService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "GameService.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

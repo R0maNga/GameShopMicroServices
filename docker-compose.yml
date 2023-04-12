@@ -2,6 +2,16 @@ version: '3.1'
 
 services:
 
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=test
+      - RABBITMQ_DEFAULT_PASS=test
+    ports:
+      - 15672:15672
+
   elasticsearch:
    container_name: elasticsearch
    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2

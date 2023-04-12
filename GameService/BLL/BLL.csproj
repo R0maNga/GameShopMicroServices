@@ -9,6 +9,15 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Spark" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Spark.Extensions.Azure.Synapse.Analytics" Version="0.15.0" />
+    <PackageReference Include="Microsoft.Spark.Extensions.Delta" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Spark.Extensions.DotNet.Interactive" Version="2.1.1" />
+    <PackageReference Include="Microsoft.SparkCLR" Version="2.0.200" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
   </ItemGroup>
